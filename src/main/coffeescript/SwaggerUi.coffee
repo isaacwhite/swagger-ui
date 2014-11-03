@@ -55,6 +55,11 @@ class SwaggerUi extends Backbone.Router
   #  so it gets called when SwaggerApi completes loading
   render:() ->
     @showMessage('Finished Loading Resource Information. Rendering Swagger UI...')
+    # fix base url weirdness
+    if @api.basePath.indexOf("http") isnt 0
+      newBase = window.location.origin + @api.basePath
+      @api.basePath = @api.paperboy.basePath = newBase
+    # end base url weirdness fix. 
     @mainView = new MainView({model: @api, el: $('#' + @dom_id), swaggerOptions: @options}).render()
     @showMessage()
     switch @options.docExpansion
